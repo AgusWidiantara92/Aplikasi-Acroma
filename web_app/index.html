@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ACROMA - Network Monitoring & AI Control</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+</head>
+<body>
+
+  <!-- ================= AUTH CONTAINER ================= -->
+  <div id="auth-container" class="active">
+    <div class="auth-banner">
+      <span class="material-icons-outlined banner-icon">wifi</span>
+      <h1 class="banner-title">Acroma</h1>
+      <p class="banner-desc">Aplikasi Cerdas Berbasis Firebase untuk Pemantauan dan Kontrol Router MikroTik dengan Rekomendasi Tindakan Berbasis AI</p>
+    </div>
+    
+    <div class="auth-card-wrapper">
+      <div class="auth-card">
+        <h2 class="card-title">Masuk Ke Akun Anda</h2>
+        <div id="error-message" class="error-msg hide">Email atau password salah. Silakan coba lagi.</div>
+        
+        <form id="login-form">
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" id="email" class="form-control" placeholder="nama@email.com" required>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" id="password" class="form-control" placeholder="Masukan Password" required>
+          </div>
+          
+          <div class="form-row">
+            <label class="checkbox-container">
+              <input type="checkbox" id="remember-me">
+              <span class="checkmark"></span>
+              Ingat saya
+            </label>
+            <a href="#" id="forgot-password" class="forgot-link">Lupa Password?</a>
+          </div>
+          
+          <button type="submit" class="btn btn-primary">Masuk</button>
+          <button type="button" id="btn-demo" class="btn btn-outline">Akses Demo Mode</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= DASHBOARD CONTAINER ================= -->
+  <div id="dashboard-container" class="hide">
+    <!-- Blue Header Banner Area -->
+    <header class="dashboard-header">
+      <div class="header-nav">
+        <h2 class="header-brand">ACROMA</h2>
+        <div class="header-actions">
+          <span class="material-icons-outlined action-bell">notifications</span>
+          <button id="btn-logout" class="logout-link">Keluar</button>
+        </div>
+      </div>
+      
+      <!-- Router Status Info Card -->
+      <div class="router-card">
+        <div class="router-card-top">
+          <div class="router-identity">
+            <div class="router-avatar">
+              <span class="material-icons-outlined">router</span>
+            </div>
+            <div>
+              <h3 id="router-name" class="router-title">Router Mikrotik A</h3>
+              <p id="router-model" class="router-subtitle">MikroTik hap ac²</p>
+              <p id="router-ip" class="router-ip-text">IP: 192.168.88.1</p>
+            </div>
+          </div>
+          <div class="router-card-actions">
+            <span class="material-icons-outlined btn-edit-icon" id="btn-edit-router">edit</span>
+          </div>
+        </div>
+        
+        <div class="router-card-status-row">
+          <div class="status-indicator">
+            <span class="circle-online"></span>
+            Online
+          </div>
+          <div class="uptime-indicator">
+            <span class="material-icons-outlined uptime-icon">schedule</span>
+            <span id="router-uptime">15d 7h 23m</span>
+          </div>
+        </div>
+        
+        <div class="router-card-metrics">
+          <div class="metric-col">
+            <p class="metric-label">CPU</p>
+            <h4 id="metric-cpu" class="metric-value">12%</h4>
+          </div>
+          <div class="metric-col">
+            <p class="metric-label">Memory</p>
+            <h4 id="metric-ram" class="metric-value">45%</h4>
+          </div>
+          <div class="metric-col">
+            <p class="metric-label">Temp</p>
+            <h4 id="metric-temp" class="metric-value">41°C</h4>
+          </div>
+        </div>
+      </div>
+    </header>
+    
+    <!-- Horizontal Navigation Menu Tabs -->
+    <nav class="navigation-tabs">
+      <button class="tab-btn active" data-tab="tab-overview">Overview</button>
+      <button class="tab-btn" data-tab="tab-ai">Kecerdasan Artifisial</button>
+      <button class="tab-btn" data-tab="tab-pelanggan">Pelanggan</button>
+      <button class="tab-btn" data-tab="tab-log">Log</button>
+      <button class="tab-btn" data-tab="tab-settings">Settings</button>
+    </nav>
+    
+    <!-- Views Content Area -->
+    <main class="tab-content-wrapper">
+      
+      <!-- 1. OVERVIEW VIEW -->
+      <section id="tab-overview" class="tab-view active">
+        <div class="overview-grid">
+          <!-- Card 1 -->
+          <div class="overview-card">
+            <div class="overview-icon-box bg-blue">
+              <span class="material-icons-outlined text-blue">person</span>
+            </div>
+            <p class="overview-title">Wifi Tersambung</p>
+            <h2 id="view-devices-count" class="overview-value">1</h2>
+            <p class="overview-desc">Connected now</p>
+          </div>
+          <!-- Card 2 -->
+          <div class="overview-card">
+            <div class="overview-icon-box bg-green">
+              <span class="material-icons-outlined text-green">bolt</span>
+            </div>
+            <p class="overview-title">Bandwidth</p>
+            <h2 id="view-bandwidth" class="overview-value">128.5</h2>
+            <p class="overview-desc">Mbps Download</p>
+          </div>
+          <!-- Card 3 -->
+          <div class="overview-card">
+            <div class="overview-icon-box bg-purple">
+              <span class="material-icons-outlined text-purple">storage</span>
+            </div>
+            <p class="overview-title">Total Data Terpakai</p>
+            <h2 id="view-data-used" class="overview-value">245.8 GB</h2>
+            <p class="overview-desc">Hari ini</p>
+          </div>
+          <!-- Card 4 -->
+          <div class="overview-card">
+            <div class="overview-icon-box bg-orange">
+              <span class="material-icons-outlined text-orange">bar_chart</span>
+            </div>
+            <p class="overview-title">Kualitas Sinyal</p>
+            <h2 id="view-signal" class="overview-value">Bagus</h2>
+            <p class="overview-desc">Rata-Rata 92%</p>
+          </div>
+        </div>
+      </section>
+      
+      <!-- 2. AI VIEW -->
+      <section id="tab-ai" class="tab-view">
+        <div class="ai-banner">
+          <h3 class="ai-banner-title">Rekomendasi AI</h3>
+          <p class="ai-banner-desc">Melakukan analisis terhadap pola performa Router Kantor Utama.</p>
+        </div>
+        
+        <div id="ai-recs-list" class="recs-list">
+          <!-- Generated recommendations list -->
+        </div>
+      </section>
+      
+      <!-- 3. PELANGGAN VIEW -->
+      <section id="tab-pelanggan" class="tab-view">
+        <div class="view-header-row">
+          <h3 class="view-section-title">Perangkat terhubung</h3>
+          <span id="devices-badge" class="badge-total">Total: 4</span>
+        </div>
+        
+        <div id="devices-list" class="devices-list">
+          <!-- Client list items -->
+        </div>
+      </section>
+      
+      <!-- 4. LOG VIEW -->
+      <section id="tab-log" class="tab-view">
+        <div class="log-banner">
+          <h3 class="log-banner-title">Aktivitas Log</h3>
+        </div>
+        
+        <div id="logs-list" class="logs-list">
+          <!-- Log list items -->
+        </div>
+      </section>
+      
+      <!-- 5. SETTINGS VIEW -->
+      <section id="tab-settings" class="tab-view">
+        <div class="settings-card">
+          <h3 class="settings-card-title">Informasi Router</h3>
+          <div class="settings-divider"></div>
+          
+          <div class="settings-row">
+            <span class="settings-label">Nama Router MikroTik</span>
+            <span id="settings-name" class="settings-value">Router Mikrotik A</span>
+          </div>
+          <div class="settings-row">
+            <span class="settings-label">Model</span>
+            <span id="settings-model" class="settings-value">MikroTik hap ac²</span>
+          </div>
+          <div class="settings-row">
+            <span class="settings-label">IP Address</span>
+            <span id="settings-ip" class="settings-value">192.168.88.1</span>
+          </div>
+          <div class="settings-row">
+            <span class="settings-label">Sistem</span>
+            <span class="settings-value">RouterOS v7.1.1</span>
+          </div>
+          <div class="settings-row">
+            <span class="settings-label">Uptime</span>
+            <span id="settings-uptime" class="settings-value">15d 7h 23m</span>
+          </div>
+        </div>
+        
+        <button id="btn-edit-router-settings" class="btn btn-primary btn-settings-edit">Edit Router</button>
+      </section>
+      
+    </main>
+  </div>
+
+  <!-- ================= MODALS ================= -->
+  <!-- Edit Router Config Modal -->
+  <div id="edit-router-modal" class="modal-overlay hide">
+    <div class="modal-content">
+      <h3 class="modal-title">Edit Router Config</h3>
+      
+      <div class="form-group">
+        <label class="form-label">Nama Router</label>
+        <input type="text" id="edit-name" class="form-control">
+      </div>
+      <div class="form-group">
+        <label class="form-label">IP / Host Address</label>
+        <input type="text" id="edit-host" class="form-control">
+      </div>
+      <div class="form-group">
+        <label class="form-label">API Port</label>
+        <input type="number" id="edit-port" class="form-control" value="8728">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input type="text" id="edit-user" class="form-control">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" id="edit-pass" class="form-control">
+      </div>
+      
+      <div class="modal-buttons">
+        <button id="btn-modal-cancel" class="btn btn-outline">Batal</button>
+        <button id="btn-modal-save" class="btn btn-primary">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Forgot Password Modal -->
+  <div id="reset-password-modal" class="modal-overlay hide">
+    <div class="modal-content">
+      <h3 class="modal-title">Reset Password</h3>
+      <p class="modal-desc">Masukkan email administrator Anda. Kami akan mengirimkan link reset password ke email tersebut.</p>
+      
+      <div class="form-group">
+        <label class="form-label">Email Administrator</label>
+        <input type="email" id="reset-email" class="form-control" placeholder="nama@email.com">
+      </div>
+      
+      <div class="modal-buttons">
+        <button id="btn-reset-cancel" class="btn btn-outline">Batal</button>
+        <button id="btn-reset-send" class="btn btn-primary">Kirim</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client Limiter Modal -->
+  <div id="limit-client-modal" class="modal-overlay hide">
+    <div class="modal-content">
+      <h3 class="modal-title">Batasi Kecepatan Client</h3>
+      <p id="limit-client-name" class="modal-desc">Batasi bandwidth untuk perangkat</p>
+      
+      <div class="form-group">
+        <label class="form-label">Maksimal Download Rate</label>
+        <select id="limit-download" class="form-control">
+          <option value="512k">512 Kbps</option>
+          <option value="1M" selected>1 Mbps</option>
+          <option value="2M">2 Mbps</option>
+          <option value="5M">5 Mbps</option>
+          <option value="10M">10 Mbps</option>
+          <option value="unlimited">Unlimited (Tanpa Batas)</option>
+        </select>
+      </div>
+      
+      <div class="modal-buttons">
+        <button id="btn-limit-cancel" class="btn btn-outline">Batal</button>
+        <button id="btn-limit-save" class="btn btn-primary">Terapkan</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
