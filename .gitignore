@@ -70,3 +70,17 @@ ios/Runner/GoogleService-Info.plist
 .vscode/
 .idea/
 *.iml
+
+# Environment files
+.env
+.env.*
+*.env
+
+# Firebase generated config
+lib/firebase_options.dart
+
+# Android signing / keystore
+*.jks
+*.keystore
+key.properties
+android/key.properties
